@@ -1,8 +1,7 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-import sentence_transformers  
-import sentence_transformers
+from transformers import AutoTokenizer, AutoModel  # Import transformers
 import subprocess
 import os
 
@@ -12,17 +11,15 @@ os.environ["OPENAI_API_KEY"] = "sk-578bxtJczEUhQGbDsGX3T3BlbkFJccn1IwfCafVZ0dIpD
 # Upgrade PyPDF2 to the latest version
 subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
 
-# Install sentence-transformers package
-subprocess.call(["pip", "install", "sentence-transformers", "-q"])
-
-
 # Create a Streamlit app
 st.title("Quality Checker")
 st.write("This application will allow you to upload your dataset and run a quality check on it.")
 st.markdown("---")
 
-# Load a sentence-transformers model
-embedder = sentence_transformers.SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+# Load a pre-trained model and tokenizer from Hugging Face
+model_name = 'sentence-transformers/all-MiniLM-L6-v2'
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
 
 # Function to process PDFs
 def process_pdf(pdf_file):
@@ -44,8 +41,11 @@ def process_pdf(pdf_file):
             st.subheader(f"Page {page_num}, Chunk {chunk_num}")
             st.write(chunk)
             
-            # Generate embeddings for the chunk
-            chunk_embeddings = embedder.encode([chunk], convert_to_tensor=True)
+            # Tokenize and generate embeddings for the chunk
+            inputs = tokenizer(chunk, return_tensors="pt", padding=True, truncation=True)
+            with st.spinner("Generating Embeddings"):
+                outputs = model(**inputs)
+            chunk_embeddings = outputs.last_hidden_state.mean(dim=1).squeeze()
             st.write("Embeddings:")
             st.write(chunk_embeddings)
 
