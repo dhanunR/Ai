@@ -12,7 +12,8 @@ os.environ["OPENAI_API_KEY"] = "sk-578bxtJczEUhQGbDsGX3T3BlbkFJccn1IwfCafVZ0dIpD
 subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
 
 # Install sentence-transformers package
-subprocess.call(["pip", "install", "sentence-transformers", "-q"])
+subprocess.call(["pip", "install", "sentence_transformers", "-q"])
+
 
 # Create a Streamlit app
 st.title("Quality Checker")
