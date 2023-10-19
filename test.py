@@ -1,5 +1,6 @@
 import streamlit as st
 from PyPDF2 import PdfReader
+import subprocess
 import os
 
 # Upgrade PyPDF2 to the latest version
