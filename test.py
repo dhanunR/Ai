@@ -1,8 +1,6 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.embeddings.openai import OpenAIEmbeddings  # Import OpenAIEmbeddings
 import subprocess
 import os
 
@@ -11,6 +9,9 @@ os.environ["OPENAI_API_KEY"] = "sk-578bxtJczEUhQGbDsGX3T3BlbkFJccn1IwfCafVZ0dIpD
 
 # Upgrade PyPDF2 to the latest version
 subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
+
+# Install sentence-transformers package
+subprocess.call(["pip", "install", "sentence-transformers", "-q"])
 
 # Create a Streamlit app
 st.title("Quality Checker")
