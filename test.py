@@ -46,8 +46,7 @@ for package in packages_to_install:
         install_package(package)
 
 # Keep adding more package names and import statements to the list and run the script to install them
-def main():
-    st.set_page_config("Chat with Multiple PDFs")
+st.set_page_config("Chat with Multiple PDFs")
     st.header("Chat with Multiple PDF 💬")
     user_question = st.text_input("Ask a Question from the PDF Files")
     if "conversation" not in st.session_state:
