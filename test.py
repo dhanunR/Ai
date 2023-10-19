@@ -2,6 +2,15 @@ import streamlit as st
 import streamlit.components.v1 as components
 import subprocess
 
+from PyPDF2 import PdfReader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import google.generativeai as palm
+from langchain.embeddings import GooglePalmEmbeddings
+from langchain.llms import GooglePalm
+from langchain.vectorstores import FAISS
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+
 # List of packages to install
 packages_to_install = [
     "langchain",
@@ -52,11 +61,11 @@ st.write("This application will allow you to upload your dataset and run a quali
 st.markdown("---")
 
 st.subheader("Upload your Documents")
-        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Process Button", accept_multiple_files=True)
-        if st.button("Process"):
-            with st.spinner("Processing"):
-                raw_text = get_pdf_text(pdf_docs)
-                text_chunks = get_text_chunks(raw_text)
-                vector_store = get_vector_store(text_chunks)
-                st.session_state.conversation = get_conversational_chain(vector_store)
-                st.success("Done")
+pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Process Button", accept_multiple_files=True)
+    if st.button("Process"):
+        with st.spinner("Processing"):
+            raw_text = get_pdf_text(pdf_docs)
+            text_chunks = get_text_chunks(raw_text)
+            vector_store = get_vector_store(text_chunks)
+            st.session_state.conversation = get_conversational_chain(vector_store)
+            st.success("Done")
