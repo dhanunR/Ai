@@ -1,6 +1,7 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
+import sentence_transformers  # Import sentence_transformers
 import subprocess
 import os
 
@@ -18,8 +19,8 @@ st.title("Quality Checker")
 st.write("This application will allow you to upload your dataset and run a quality check on it.")
 st.markdown("---")
 
-# Initialize Hugging Face embeddings
-embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
+# Load a sentence-transformers model
+embedder = sentence_transformers.SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 # Function to process PDFs
 def process_pdf(pdf_file):
@@ -42,7 +43,7 @@ def process_pdf(pdf_file):
             st.write(chunk)
             
             # Generate embeddings for the chunk
-            chunk_embeddings = embeddings.embed([chunk])
+            chunk_embeddings = embedder.encode([chunk], convert_to_tensor=True)
             st.write("Embeddings:")
             st.write(chunk_embeddings)
 
