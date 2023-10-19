@@ -1,6 +1,10 @@
 import streamlit as st
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 import os
+
+# Upgrade PyPDF2 to the latest version
+subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
+
 
 # Create a Streamlit app
 st.title("Quality Checker")
@@ -9,13 +13,12 @@ st.markdown("---")
 
 # Function to process PDFs
 def process_pdf(pdf_file):
-    pdf_reader = PdfFileReader(pdf_file)
-    total_pages = pdf_reader.getNumPages()
+    pdf_reader = PdfReader(pdf_file)
+    total_pages = len(pdf_reader.pages)
     st.write(f"Total Pages: {total_pages}")
-    for page_num in range(total_pages):
-        page = pdf_reader.getPage(page_num)
-        page_text = page.extractText()
-        st.subheader(f"Page {page_num + 1}")
+    for page_num, page in enumerate(pdf_reader.pages, 1):
+        page_text = page.extract_text()
+        st.subheader(f"Page {page_num}")
         st.write(page_text)
 
 # Upload PDF files
@@ -26,5 +29,3 @@ if st.button("Process"):
         with st.spinner("Processing"):
             for pdf_file in pdf_docs:
                 process_pdf(pdf_file)
-
-# Note: You don't need the package installation part in this code, as it's not directly related to the PDF processing.
