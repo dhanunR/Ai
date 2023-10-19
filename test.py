@@ -64,8 +64,6 @@ st.subheader("Upload your Documents")
 pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Process Button", accept_multiple_files=True)
 if st.button("Process"):
     with st.spinner("Processing"):
-        raw_text = get_pdf_text(pdf_docs)
-        text_chunks = get_text_chunks(raw_text)
-        vector_store = get_vector_store(text_chunks)
-        st.session_state.conversation = get_conversational_chain(vector_store)
-        st.success("Done")
+        if pdf_docs.endswith(".pdf"):
+            loader=PyPDFLoader(pdf_docs)
+            document.extend(loader.load())
