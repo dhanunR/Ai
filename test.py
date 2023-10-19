@@ -11,6 +11,8 @@ from langchain.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
+import os
+
 # List of packages to install
 packages_to_install = [
     "langchain",
@@ -26,6 +28,7 @@ packages_to_install = [
     "chromadb",
     "openai",
     "tiktoken",
+    "PyPDF2",
     # Add more package names here
 
     # Import statements for additional modules
@@ -64,6 +67,19 @@ st.subheader("Upload your Documents")
 pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Process Button", accept_multiple_files=True)
 if st.button("Process"):
     with st.spinner("Processing"):
-        if pdf_docs.endswith(".pdf"):
-            loader=PyPDFLoader(pdf_docs)
-            document.extend(loader.load())
+         pdf_reader = PdfReader.PdfFileReader(pdf_docs)
+        st.write(f"Total Pages: {pdf_reader.numPages}")
+for page_num in range(pdf_reader.numPages):
+    page = pdf_reader.getPage(page_num)
+        page_text = page.extractText()
+        st.subheader(f"Page {page_num + 1}")
+        st.write(page_text)
+
+    # Close the PDF document
+    pdf_document.close()
+        #if pdf_docs.endswith(".pdf"):
+         #   loader=PyPDFLoader(pdf_docs)
+          #  document.extend(loader.load())
+
+
+
