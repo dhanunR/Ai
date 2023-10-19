@@ -1,9 +1,11 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from transformers import AutoTokenizer, AutoModel  # Import transformers
 import subprocess
 import os
+
+# Install the transformers library
+subprocess.call(["pip", "install", "transformers", "-q"])
 
 # Set the OpenAI API key
 os.environ["OPENAI_API_KEY"] = "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"
