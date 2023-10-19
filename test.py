@@ -3,7 +3,7 @@ from PyPDF2 import PdfReader
 import os
 
 # Upgrade PyPDF2 to the latest version
-subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
+pip install PyPDF2 --upgrade -q
 
 
 # Create a Streamlit app
