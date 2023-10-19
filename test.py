@@ -1,7 +1,7 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-import sentence_transformers  # Import sentence_transformers
+import sentence-transformers  # Import sentence_transformers
 import subprocess
 import os
 
@@ -12,7 +12,7 @@ os.environ["OPENAI_API_KEY"] = "sk-578bxtJczEUhQGbDsGX3T3BlbkFJccn1IwfCafVZ0dIpD
 subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
 
 # Install sentence-transformers package
-subprocess.call(["pip", "install", "sentence_transformers", "-q"])
+subprocess.call(["pip", "install", "sentence-transformers", "-q"])
 
 
 # Create a Streamlit app
