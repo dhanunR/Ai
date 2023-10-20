@@ -1,6 +1,7 @@
 import streamlit as st
 import subprocess
 import os
+import fitz
 
 # Upgrade PyMuPDF to the latest version
 subprocess.call(["pip", "install", "PyMuPDF", "--upgrade", "-q"])
