@@ -2,6 +2,7 @@ import openai
 import streamlit as st
 import os
 import subprocess
+import PyPDF2
 # Check if a requirements.txt file exists
 if not os.path.exists('requirements.txt'):
     st.error("The requirements.txt file is missing. Please make sure it's in the same directory as your app.")
@@ -17,7 +18,7 @@ else:
 # Continue with the rest of your Streamlit app code
 
 st.title("PDF Chatbot")
-import PyPDF2
+
 
 # Use subprocess to install the 'openai' package
 
