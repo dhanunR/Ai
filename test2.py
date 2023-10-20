@@ -29,10 +29,11 @@ openai.api_key = api_key
 
 # Function to extract text from a PDF file using PyPDF2
 def extract_text_from_pdf(pdf_file):
-    pdf_reader = PyPDF2.PdfReader(pdf_file)
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
     text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
+    for page_num in range(pdf_reader.numPages):
+        page = pdf_reader.getPage(page_num)
+        text += page.extractText()
     return text
 
 # Function to interact with the chatbot
