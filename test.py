@@ -1,57 +1,37 @@
 import streamlit as st
-from PyPDF2 import PdfFileReader, PdfFileReader
+from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from transformers import AutoTokenizer, AutoModel
+import sentence_transformers  # Import sentence_transformers
 import subprocess
 import os
 
-# Install necessary packages
-required_packages = [
-    "langchain",
-    "bitsandbytes",
-    "accelerate",
-    "xformers",
-    "einops",
-    "datasets",
-    "loralib",
-    "sentencepiece",
-    "pypdf2",
-    "chromadb",
-    "openai",
-    "tiktoken",
-    "sentence_transformers",
-]
-for package in required_packages:
-    subprocess.check_call(["pip", "install", package, "-q"])
-
-# Install or upgrade specific packages
-subprocess.check_call(["pip", "install", "transformers", "--upgrade", "-q"])
-subprocess.check_call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
-
-# Set OpenAI API key
+# Set the OpenAI API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-# Streamlit app setup
+# Upgrade PyPDF2 to the latest version
+subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
+
+# Install sentence-transformers package
+subprocess.call(["pip", "install", "sentence-transformers", "-q"])
+
+# Create a Streamlit app
 st.title("Quality Checker")
-st.write("This application allows you to upload and process PDF documents.")
+st.write("This application will allow you to upload your dataset and run a quality check on it.")
 st.markdown("---")
 
-# Load pre-trained model and tokenizer
-model_name = 'sentence-transformers/all-MiniLM-L6-v2'
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
+# Load a sentence-transformers model
+embedder = sentence_transformers.SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 # Function to process PDFs
 def process_pdf(pdf_file):
-    pdf_reader = PdfFileReader(pdf_file)
-    total_pages = pdf_reader.getNumPages()
+    pdf_reader = PdfReader(pdf_file)
+    total_pages = len(pdf_reader.pages)
     st.write(f"Total Pages: {total_pages}")
     
     # Initialize the CharacterTextSplitter
     document_splitter = CharacterTextSplitter(separator='\n', chunk_size=500, chunk_overlap=100)
     
-    for page_num in range(total_pages):
-        page = pdf_reader.getPage(page_num)
+    for page_num, page in enumerate(pdf_reader.pages, 1):
         page_text = page.extract_text()
         
         # Split the page text into chunks
@@ -59,14 +39,11 @@ def process_pdf(pdf_file):
         
         # Display each chunk separately
         for chunk_num, chunk in enumerate(document_chunks, 1):
-            st.subheader(f"Page {page_num + 1}, Chunk {chunk_num}")
+            st.subheader(f"Page {page_num}, Chunk {chunk_num}")
             st.write(chunk)
             
-            # Tokenize and generate embeddings for the chunk
-            inputs = tokenizer(chunk, return_tensors="pt", padding=True, truncation=True)
-            with st.spinner("Generating Embeddings"):
-                outputs = model(**inputs)
-            chunk_embeddings = outputs.last_hidden_state.mean(dim=1).squeeze()
+            # Generate embeddings for the chunk
+            chunk_embeddings = embedder.encode([chunk], convert_to_tensor=True)
             st.write("Embeddings:")
             st.write(chunk_embeddings)
 
