@@ -2,8 +2,7 @@ import streamlit as st
 import PyPDF2
 import os
 
-st.title("Quality Checker")
-st.write("This application will allow you to upload your dataset and run a quality check on it.")
+st.title("AI Model")
 st.markdown("---")
 
 # Function to split text into chunks
