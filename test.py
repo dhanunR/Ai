@@ -40,8 +40,6 @@ packages_to_install = [
     "from langchain.chat_models import ChatOpenAI",
     "import subprocess",
     "import os",
-
-    "import os",
     "import sys",
     # Add more import statements here
 ]
