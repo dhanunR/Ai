@@ -3,6 +3,7 @@ import streamlit as st
 import os
 import subprocess
 import PyPDF2
+
 # Check if a requirements.txt file exists
 if not os.path.exists('requirements.txt'):
     st.error("The requirements.txt file is missing. Please make sure it's in the same directory as your app.")
@@ -18,10 +19,6 @@ else:
 # Continue with the rest of your Streamlit app code
 
 st.title("PDF Chatbot")
-
-
-# Use subprocess to install the 'openai' package
-
 
 # Retrieve OpenAI API key from Streamlit secrets
 api_key = st.secrets["OPENAI_API_KEY"]
@@ -46,14 +43,20 @@ def chat_with_bot():
             # that the user is initiating the conversation.
             conversation = f"You: {user_input}\nPDF Text: {pdf_text}\nYou:"
             
+            # Debugging: Print the conversation
+            st.write("Conversation:", conversation)
+            
             response = openai.Completion.create(
                 engine="text-davinci-002",
                 prompt=conversation,
                 max_tokens=100,  # Increase the max tokens for longer responses
             )
             bot_response = response.choices[0].text.strip()
+            
+            # Debugging: Print the bot's response
+            st.write("Bot Response:", bot_response)
+            
             st.write("PDF Chatbot:", bot_response)
-
 
 # Upload PDF file
 pdf_file = st.file_uploader("Upload a PDF file", type=["pdf"])
@@ -61,8 +64,10 @@ pdf_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 if pdf_file:
     st.write(f"Reading PDF file: {pdf_file.name}")
     pdf_text = extract_text_from_pdf(pdf_file)
+    
+    # Debugging: Print the extracted text
     st.write(f"Extracted Text:\n{pdf_text}")
-
+    
 st.markdown("---")
 st.write("Start a conversation with the PDF Chatbot:")
 chat_with_bot()
