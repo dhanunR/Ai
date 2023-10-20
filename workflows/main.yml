@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Choose an appropriate runner
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -16,17 +16,17 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x  # Use the desired Python version
+          python-version: 3.x
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-        working-directory: ./  # Adjust to the path where your code is
+        working-directory: ./
 
       - name: Deploy
         run: |
-          export OPENAI_API_KEY=$OPENAI_API_KEY  # Set the API key as an environment variable
-          streamlit run your_app.py  # Replace with the actual command to run your Streamlit app
+          export OPENAI_API_KEY=$OPENAI_API_KEY
+          streamlit run test.py  # Replace with the actual command to run your Streamlit app
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        working-directory: ./  # Adjust to the path where your code is
+        working-directory: ./
