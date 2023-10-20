@@ -1,4 +1,7 @@
-
+import openai
+import streamlit as st
+import os
+import subprocess
 # Check if a requirements.txt file exists
 if not os.path.exists('requirements.txt'):
     st.error("The requirements.txt file is missing. Please make sure it's in the same directory as your app.")
@@ -16,10 +19,7 @@ else:
 st.title("PDF Chatbot")
 
 # Use subprocess to install the 'openai' package
-import openai
-import streamlit as st
-import os
-import subprocess
+
 
 # Retrieve OpenAI API key from Streamlit secrets
 api_key = st.secrets["OPENAI_API_KEY"]
