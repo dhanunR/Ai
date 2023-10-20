@@ -1,30 +1,20 @@
 import streamlit as st
-import subprocess
+import PyPDF2
 import os
 
-# Upgrade PyMuPDF to the latest version
-subprocess.call(["pip", "install", "PyMuPDF", "--upgrade", "-q"])
-
-# Check if PyMuPDF was successfully installed
-try:
-    import fitz
-except ImportError:
-    st.error("PyMuPDF (fitz) failed to install. Please check your installation or contact the system administrator.")
-
-# Continue with the Streamlit app
 st.title("Quality Checker")
 st.write("This application will allow you to upload your dataset and run a quality check on it.")
 st.markdown("---")
 
 # Function to process PDFs
 def process_pdf(pdf_file):
-    doc = fitz.open(pdf_file)
-    total_pages = doc.page_count
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+    total_pages = pdf_reader.numPages
     st.write(f"Total Pages: {total_pages}")
     
     for page_num in range(total_pages):
-        page = doc.load_page(page_num)
-        page_text = page.get_text()
+        page = pdf_reader.getPage(page_num)
+        page_text = page.extractText()
         
         # Process the page_text as needed
         # Split the page_text into chunks or perform other text processing here
