@@ -1,12 +1,17 @@
 import streamlit as st
-import fitz  # PyMuPDF library for PDF text extraction
 import subprocess
 import os
 
 # Upgrade PyMuPDF to the latest version
 subprocess.call(["pip", "install", "PyMuPDF", "--upgrade", "-q"])
 
-# Create a Streamlit app
+# Check if PyMuPDF was successfully installed
+#try:
+#    import fitz
+#except ImportError:
+#    st.error("PyMuPDF (fitz) failed to install. Please check your installation or contact the system administrator.")
+
+# Continue with the Streamlit app
 st.title("Quality Checker")
 st.write("This application will allow you to upload your dataset and run a quality check on it.")
 st.markdown("---")
