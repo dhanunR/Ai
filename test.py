@@ -23,13 +23,21 @@ required_packages = [
 for package in required_packages:
     subprocess.check_call(["pip", "install", package, "-q"])
 
-# Set OpenAI API key
-os.environ["OPENAI_API_KEY"] = "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"
+# Retrieve the OpenAI API key from the environment variable
+api_key = os.environ.get("OPENAI_API_KEY")
+
+# Check if the API key is available
+if api_key is None:
+    st.warning("API key not found. Please set the OPENAI_API_KEY environment variable.")
+else:
+    st.title("Quality Checker")
+    st.write("This application allows you to upload and process PDF documents.")
+    st.markdown("---")
 
 # Streamlit app setup
-st.title("Quality Checker")
-st.write("This application allows you to upload and process PDF documents.")
-st.markdown("---")
+#st.title("Quality Checker")
+#st.write("This application allows you to upload and process PDF documents.")
+#st.markdown("---")
 
 # Function to process PDFs
 def process_pdf(pdf_file):
