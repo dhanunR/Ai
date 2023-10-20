@@ -1,11 +1,10 @@
 import streamlit as st
-from PyPDF2 import PdfReader
-from langchain.text_splitter import CharacterTextSplitter
+import fitz  # PyMuPDF library for PDF text extraction
 import subprocess
 import os
 
-# Upgrade PyPDF2 to the latest version
-subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
+# Upgrade PyMuPDF to the latest version
+subprocess.call(["pip", "install", "PyMuPDF", "--upgrade", "-q"])
 
 # Create a Streamlit app
 st.title("Quality Checker")
@@ -14,24 +13,20 @@ st.markdown("---")
 
 # Function to process PDFs
 def process_pdf(pdf_file):
-    pdf_reader = PdfReader(pdf_file)
-    total_pages = len(pdf_reader.pages)
+    doc = fitz.open(pdf_file)
+    total_pages = doc.page_count
     st.write(f"Total Pages: {total_pages}")
     
-    # Initialize the CharacterTextSplitter
-    document_splitter = CharacterTextSplitter(separator='\n', chunk_size=500, chunk_overlap=100)
-    
-    for page_num, page in enumerate(pdf_reader.pages, 1):
-        page_text = page.extract_text()
+    for page_num in range(total_pages):
+        page = doc.load_page(page_num)
+        page_text = page.get_text()
         
-        # Split the page text into chunks
-        document_chunks = document_splitter.split_documents(page_text)
+        # Process the page_text as needed
+        # Split the page_text into chunks or perform other text processing here
         
-        # Display each chunk separately
-        for chunk_num, chunk in enumerate(document_chunks, 1):
-            st.subheader(f"Page {page_num}, Chunk {chunk_num}")
-            st.write(chunk)
-
+        st.subheader(f"Page {page_num + 1}")
+        st.write(page_text)
+        
 # Upload PDF files
 pdf_docs = st.file_uploader("Upload your PDF Files", accept_multiple_files=True)
 
