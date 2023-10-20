@@ -1,5 +1,5 @@
 streamlit==1.27.2
 openai==0.28.1
 PyPDF2==1.26.0
-python==3.12.0
+
 
