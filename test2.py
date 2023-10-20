@@ -1,33 +1,32 @@
 import streamlit as st
-import PyPDF2
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
+import fitz  # PyMuPDF library for PDF text extraction
+import openai
+
+# Set your OpenAI API key
+api_key = "YOUR_OPENAI_API_KEY"
+openai.api_key = api_key
 
 st.title("PDF Chatbot")
 
-# Initialize a ChatterBot instance
-chatbot = ChatBot("PDFBot")
-
-# Create a new trainer for the chatbot
-trainer = ChatterBotCorpusTrainer(chatbot)
-
-# Train the chatbot on the English language
-trainer.train("chatterbot.corpus.english")
-
 # Function to extract text from a PDF file
 def extract_text_from_pdf(pdf_file):
-    pdf_reader = PyPDF2.PdfReader(pdf_file)
+    doc = fitz.open(pdf_file)
     text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
+    for page in doc:
+        text += page.get_text()
     return text
 
 # Function to interact with the chatbot
-def chat_with_bot():
+def chat_with_bot(text):
     user_input = st.text_input("You: ")
     if user_input:
-        response = chatbot.get_response(user_input)
-        st.write("PDFBot:", response)
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=f"Read the following PDF text:\n{text}\n\nUser: {user_input}\nBot:",
+            max_tokens=50,
+        )
+        bot_response = response.choices[0].text.strip()
+        st.write("PDF Chatbot:", bot_response)
 
 # Upload PDF file
 pdf_file = st.file_uploader("Upload a PDF file", type=["pdf"])
@@ -38,5 +37,5 @@ if pdf_file:
     st.write(f"Extracted Text:\n{pdf_text}")
 
 st.markdown("---")
-st.write("Start a conversation with the PDFBot:")
-chat_with_bot()
+st.write("Start a conversation with the PDF Chatbot:")
+chat_with_bot(pdf_text)
