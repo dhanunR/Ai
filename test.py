@@ -8,18 +8,17 @@ st.markdown("---")
 
 # Function to process PDFs
 def process_pdf(pdf_file):
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-    total_pages = pdf_reader.numPages
+    pdf_reader = PyPDF2.PdfReader(pdf_file)
+    total_pages = len(pdf_reader.pages)
     st.write(f"Total Pages: {total_pages}")
     
-    for page_num in range(total_pages):
-        page = pdf_reader.getPage(page_num)
-        page_text = page.extractText()
+    for page_num, page in enumerate(pdf_reader.pages, 1):
+        page_text = page.extract_text()
         
         # Process the page_text as needed
         # Split the page_text into chunks or perform other text processing here
         
-        st.subheader(f"Page {page_num + 1}")
+        st.subheader(f"Page {page_num}")
         st.write(page_text)
         
 # Upload PDF files
