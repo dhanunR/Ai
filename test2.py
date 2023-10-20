@@ -27,8 +27,7 @@ def extract_text_from_pdf(pdf_file):
     return text
 
 # Function to interact with the chatbot
-def chat_with_bot():
-    pdf_text = None
+def chat_with_bot(pdf_text):
     user_input = st.text_input("You: ")
     if user_input:
         response = openai.Completion.create(
@@ -38,8 +37,6 @@ def chat_with_bot():
         )
         bot_response = response.choices[0].text.strip()
         st.write("PDF Chatbot:", bot_response)
-
-    return pdf_text
 
 # Upload PDF file
 pdf_file = st.file_uploader("Upload a PDF file", type=["pdf"])
@@ -51,4 +48,4 @@ if pdf_file:
 
 st.markdown("---")
 st.write("Start a conversation with the PDF Chatbot:")
-chat_with_bot()
+chat_with_bot(pdf_text)
