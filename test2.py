@@ -32,13 +32,18 @@ def chat_with_bot():
     user_input = st.text_input("You: ")
     if user_input:
         if pdf_text is not None:
+            # Start the conversation with "You: <User Input>" to make it clear
+            # that the user is initiating the conversation.
+            conversation = f"You: {user_input}\nPDF Text: {pdf_text}\nYou:"
+            
             response = openai.Completion.create(
                 engine="text-davinci-002",
-                prompt=f"Read the following PDF text:\n{pdf_text}\n\nUser: {user_input}\nBot:",
-                max_tokens=50,
+                prompt=conversation,
+                max_tokens=100,  # Increase the max tokens for longer responses
             )
             bot_response = response.choices[0].text.strip()
             st.write("PDF Chatbot:", bot_response)
+
 
 # Upload PDF file
 pdf_file = st.file_uploader("Upload a PDF file", type=["pdf"])
