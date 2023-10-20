@@ -26,18 +26,23 @@ def process_pdf(pdf_file, chunk_size=500, chunk_overlap=100):
     total_pages = len(pdf_reader.pages)
     st.write(f"Total Pages: {total_pages}")
 
+    total_chunks = 0
+
     for page_num, page in enumerate(pdf_reader.pages, 1):
         page_text = page.extract_text()
 
         # Split the page text into chunks
         document_chunks = split_text_into_chunks(page_text, chunk_size, chunk_overlap)
+        total_chunks += len(document_chunks)
 
         for chunk_num, chunk in enumerate(document_chunks, 1):
             st.subheader(f"Page {page_num}, Chunk {chunk_num}")
             st.write(chunk)
 
+    st.write(f"Total Chunks: {total_chunks}")
+
 # Upload PDF files
-pdf_docs = st.file_uploader("Upload your PDF Files", accept_multiple_files=True)
+pdf_docs = st.file_uploader("Upload your PDF Files", accept-multiple_files=True)
 
 if st.button("Process"):
     if pdf_docs:
