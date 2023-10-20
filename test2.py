@@ -17,6 +17,7 @@ else:
 # Continue with the rest of your Streamlit app code
 
 st.title("PDF Chatbot")
+import PyPDF2
 
 # Use subprocess to install the 'openai' package
 
