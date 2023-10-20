@@ -1,7 +1,20 @@
 import streamlit as st
-import PyPDF2
 import os
 import subprocess
+
+# Check if a requirements.txt file exists
+if not os.path.exists('requirements.txt'):
+    st.error("The requirements.txt file is missing. Please make sure it's in the same directory as your app.")
+else:
+    # Use subprocess to install the required packages from requirements.txt
+    try:
+        st.write("Installing required packages...")
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        st.success("Required packages installed successfully.")
+    except subprocess.CalledProcessError:
+        st.error("Failed to install required packages. Please check your environment and dependencies.")
+
+# Continue with the rest of your Streamlit app code
 
 st.title("PDF Chatbot")
 
