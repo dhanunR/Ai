@@ -13,7 +13,7 @@ try:
     import openai
 
     # Retrieve OpenAI API key from Streamlit secrets
-    api_key = st.secrets["openai_api_key"]
+    api_key = st.secrets["OPENAI_API_KEY"]
     openai.api_key = api_key
 except ImportError:
     st.error("The 'openai' package couldn't be imported. Please check your environment and dependencies.")
