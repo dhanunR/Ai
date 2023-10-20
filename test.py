@@ -1,10 +1,14 @@
 import streamlit as st
 import PyPDF2
+from langchain.text_splitter import CharacterTextSplitter
 import os
 
 st.title("Quality Checker")
 st.write("This application will allow you to upload your dataset and run a quality check on it.")
 st.markdown("---")
+
+# Initialize the CharacterTextSplitter
+document_splitter = CharacterTextSplitter(separator='\n', chunk_size=500, chunk_overlap=100)
 
 # Function to process PDFs
 def process_pdf(pdf_file):
@@ -15,11 +19,12 @@ def process_pdf(pdf_file):
     for page_num, page in enumerate(pdf_reader.pages, 1):
         page_text = page.extract_text()
         
-        # Process the page_text as needed
-        # Split the page_text into chunks or perform other text processing here
+        # Split the page text into chunks using the CharacterTextSplitter
+        document_chunks = document_splitter.split_documents([page_text])
         
-        st.subheader(f"Page {page_num}")
-        st.write(page_text)
+        for chunk_num, chunk in enumerate(document_chunks, 1):
+            st.subheader(f"Page {page_num}, Chunk {chunk_num}")
+            st.write(chunk)
         
 # Upload PDF files
 pdf_docs = st.file_uploader("Upload your PDF Files", accept_multiple_files=True)
