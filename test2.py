@@ -19,17 +19,10 @@ else:
 st.title("PDF Chatbot")
 
 # Use subprocess to install the 'openai' package
-subprocess.run(["pip", "install", "openai"])
-
-# Verify if the 'openai' package is installed and import it
-try:
-    import openai
-
-    # Retrieve OpenAI API key from Streamlit secrets
-    api_key = st.secrets["OPENAI_API_KEY"]
-    openai.api_key = api_key
-except ImportError:
-    st.error("The 'openai' package couldn't be imported. Please check your environment and dependencies.")
+import openai
+# Retrieve OpenAI API key from Streamlit secrets
+api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = api_key
 
 # Function to extract text from a PDF file using PyPDF2
 def extract_text_from_pdf(pdf_file):
