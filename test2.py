@@ -1,9 +1,14 @@
 import streamlit as st
 import PyPDF2
 import os
-import openai
+import subprocess
 
 st.title("PDF Chatbot")
+
+# Use subprocess to install the 'openai' package
+subprocess.run(["pip", "install", "openai"])
+
+import openai
 
 # Retrieve OpenAI API key from Streamlit secrets
 api_key = st.secrets["OPENAI_API_KEY"]
