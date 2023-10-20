@@ -1,19 +1,20 @@
 import streamlit as st
-import fitz  # PyMuPDF library for PDF text extraction
+import PyPDF2
+import os
 import openai
-
-# Set your OpenAI API key
-api_key = "YOUR_OPENAI_API_KEY"
-openai.api_key = api_key
 
 st.title("PDF Chatbot")
 
-# Function to extract text from a PDF file
+# Retrieve OpenAI API key from Streamlit secrets
+api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = api_key
+
+# Function to extract text from a PDF file using PyPDF2
 def extract_text_from_pdf(pdf_file):
-    doc = fitz.open(pdf_file)
+    pdf_reader = PyPDF2.PdfReader(pdf_file)
     text = ""
-    for page in doc:
-        text += page.get_text()
+    for page in pdf_reader.pages:
+        text += page.extract_text()
     return text
 
 # Function to interact with the chatbot
