@@ -10,7 +10,7 @@ import os
 subprocess.call(["pip", "install", "transformers", "-q"])
 
 # Set the OpenAI API key
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 
 # Upgrade PyPDF2 to the latest version
 subprocess.call(["pip", "install", "PyPDF2", "--upgrade", "-q"])
